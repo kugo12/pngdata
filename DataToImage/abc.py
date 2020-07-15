@@ -1,13 +1,15 @@
-from abc import ABC, abstractstaticmethod
-from typing import BinaryIO, Union
+from abc import ABC, abstractmethod
+from typing import BinaryIO, Tuple
 
 
 class PluginABC(ABC):
 
-    @abstractstaticmethod
-    def decode(fp: BinaryIO) -> Union[str, bytes]:
-        pass
+    @staticmethod
+    @abstractmethod
+    def decode(fp: BinaryIO) -> str:
+        raise NotImplementedError
 
-    @abstractstaticmethod
-    def encode(data: Union[str, bytes]) -> BinaryIO:
-        pass
+    @staticmethod
+    @abstractmethod
+    def encode(data: str) -> Tuple[BinaryIO, str]:
+        raise NotImplementedError
