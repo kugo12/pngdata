@@ -21,27 +21,24 @@ python -m pngdata d <file path>
 ## Examples
 
 ```python
-from pngdata import PNGData
+import pngdata
 
-with open('example.png', 'wb') as f:
-    PNGData.encode('example text', f)
+pngdata.encode('example text', 'example.png')
 
-with open('example.png', 'rb') as f:
-    data = PNGData.decode(f)
-    print(data)  # prints "example text"
+data = pngdata.decode('example.png')
+print(data)  # prints "example text"
 
 # if no fp argument supplied encode returns BytesIO
-png_encoded = PNGData.encode('example text')
-png_decoded = PNGData.decode(png_encoded)
+png_encoded = pngdata.encode('example text')
+png_decoded = pngdata.decode(png_encoded)
 print(png_decoded)  # prints "example text"
 
 # of course you can save BytesIO to file
-with open('example.png', 'wb') as f:
+with open('bytesio.png', 'wb') as f:
     # seek needed, because png_encoded was read before
     png_encoded.seek(0)
     f.write(png_encoded.read())
 
-with open('example.png', 'rb') as f:
-    data = PNGData.decode(f)
-    print(data)  # prints "example text"
+data = pngdata.decode('bytesio.png')
+print(data)  # prints "example text"
 ```
