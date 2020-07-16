@@ -7,7 +7,17 @@ from typing import BinaryIO, Union, Optional
 class PNGData():
 
     @staticmethod
-    def decode(fp: BinaryIO, string=True) -> Union[str, bytes]:
+    def decode(fp: Union[BinaryIO, str], string: bool = True) -> Union[str, bytes]:
+        """Decodes png file to bytes or string
+
+        Args:
+            fp: file like object or path.
+            string: whether return UTF-8 string or raw bytes.
+
+        Returns:
+            UTF-8 string or bytes object.
+
+        """
         img = Image.open(fp)
         data = img.tobytes()
 
@@ -17,8 +27,18 @@ class PNGData():
 
     @staticmethod
     def encode(data: Union[str, bytes],
-               fp: Optional[BinaryIO] = None
-               ) -> BinaryIO:
+               fp: Optional[Union[BinaryIO, str]] = None
+               ) -> Union[BinaryIO, str]:
+        """Encode data to fp
+
+        Args:
+            data: utf-8 string or raw bytes.
+            fp: optional file like object or path.
+
+        Returns:
+            fp if supplied, else BytesIO with png image.
+
+        """
         if isinstance(data, str):
             data = data.encode('utf-8')
 
