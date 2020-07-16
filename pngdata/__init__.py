@@ -1,1 +1,1 @@
-from pngdata.core import PNGData
+from pngdata.core import encode, decode

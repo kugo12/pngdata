@@ -1,6 +1,6 @@
 import argparse
 
-from pngdata import PNGData
+import pngdata
 
 
 parser = argparse.ArgumentParser()
@@ -17,10 +17,10 @@ args = parser.parse_args()
 
 if args.action == 'e':
     text = ' '.join(args.text)
-    PNGData.encode(text, args.file)
+    pngdata.encode(text, args.file)
     args.file.close()
     print('Success')
 elif args.action == 'd':
-    print(PNGData.decode(args.file))
+    print(pngdata.decode(args.file))
 else:
     parser.print_help()

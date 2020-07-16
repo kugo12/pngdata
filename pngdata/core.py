@@ -4,54 +4,51 @@ from math import sqrt, ceil
 from typing import BinaryIO, Union, Optional
 
 
-class PNGData():
+def decode(fp: Union[BinaryIO, str], string: bool = True) -> Union[str, bytes]:
+    """Decodes png file to bytes or string
 
-    @staticmethod
-    def decode(fp: Union[BinaryIO, str], string: bool = True) -> Union[str, bytes]:
-        """Decodes png file to bytes or string
+    Args:
+        fp: file like object or path.
+        string: whether return UTF-8 string or raw bytes.
 
-        Args:
-            fp: file like object or path.
-            string: whether return UTF-8 string or raw bytes.
+    Returns:
+        UTF-8 string or bytes object.
 
-        Returns:
-            UTF-8 string or bytes object.
+    """
+    img = Image.open(fp)
+    data = img.tobytes()
 
-        """
-        img = Image.open(fp)
-        data = img.tobytes()
+    if string:
+        data = data.decode('utf-8')
+    return data
 
-        if string:
-            data = data.decode('utf-8')
-        return data
 
-    @staticmethod
-    def encode(data: Union[str, bytes],
-               fp: Optional[Union[BinaryIO, str]] = None
-               ) -> Union[BinaryIO, str]:
-        """Encode data to fp
+def encode(data: Union[str, bytes],
+           fp: Optional[Union[BinaryIO, str]] = None
+           ) -> Union[BinaryIO, str]:
+    """Encode data to fp
 
-        Args:
-            data: utf-8 string or raw bytes.
-            fp: optional file like object or path.
+    Args:
+        data: utf-8 string or raw bytes.
+        fp: optional file like object or path.
 
-        Returns:
-            fp if supplied, else BytesIO with png image.
+    Returns:
+        fp if supplied, else BytesIO with png image.
 
-        """
-        if isinstance(data, str):
-            data = data.encode('utf-8')
+    """
+    if isinstance(data, str):
+        data = data.encode('utf-8')
 
-        # always square image
-        size = ceil(sqrt(len(data)/4))
-        missing_bytes = (size**2) * 4 - len(data)
-        size = (size, size)
+    # always square image
+    size = ceil(sqrt(len(data)/4))
+    missing_bytes = (size**2) * 4 - len(data)
+    size = (size, size)
 
-        data += b'\x00' * missing_bytes
+    data += b'\x00' * missing_bytes
 
-        img = Image.frombytes('RGBA', size, data)
-        if fp is None:
-            fp = BytesIO()
-        img.save(fp, 'png', quality=100)
+    img = Image.frombytes('RGBA', size, data)
+    if fp is None:
+        fp = BytesIO()
+    img.save(fp, 'png', quality=100)
 
-        return fp
+    return fp
